@@ -12,7 +12,7 @@ StudentTeacher requires Docker and Postman to run.
 3. You will be able to run the APIs in Postman by selecting ```GET``` or ```POST``` and entering ```http://localhost:8080/``` followed by the API endpoint for each of the APIs .
 
 ## APIs
-##### 1. (Extra) Create a teacher 
+#### 1. (Extra) Create a teacher 
 - Endpoint: ```POST /api/add-teacher```
 - Request body example:
 ```
@@ -21,7 +21,7 @@ StudentTeacher requires Docker and Postman to run.
 }
 ```
 
-##### 2. (Extra) Create a student 
+#### 2. (Extra) Create a student 
 - Endpoint: ```POST /api/add-student```
 - Request body example 1 (default student is not suspended unless stated):
 ```
@@ -37,7 +37,7 @@ StudentTeacher requires Docker and Postman to run.
 }
 ```
 
-##### 3. As a teacher, I want to register one or more students to a specified teacher.
+#### 3. As a teacher, I want to register one or more students to a specified teacher.
 - Endpoint: ```POST /api/register```
 - Request body:
 ```
@@ -51,12 +51,12 @@ StudentTeacher requires Docker and Postman to run.
 }
 ```
 
-##### 4. As a teacher, I want to retrieve a list of students common to a given list of teachers (i.e. retrieve students who are registered to ALL of the given teachers).
+#### 4. As a teacher, I want to retrieve a list of students common to a given list of teachers (i.e. retrieve students who are registered to ALL of the given teachers).
 - Endpoint: ```GET /api/commonstudents```
 - Request example 1: ```GET /api/commonstudents?teacher=teacherken%40gmail.com```
 - Request example 2: ```GET /api/commonstudents?teacher=teacherken%40gmail.com&teacher=teacherjoe%40gmail.com```
 
-##### 5. As a teacher, I want to suspend a specified student.
+#### 5. As a teacher, I want to suspend a specified student.
 - Endpoint: ```POST /api/suspend```
 - Request body:
 ```
@@ -65,7 +65,7 @@ StudentTeacher requires Docker and Postman to run.
 }
 ```
 
-##### 6. As a teacher, I want to retrieve a list of students who can receive a given notification.
+#### 6. As a teacher, I want to retrieve a list of students who can receive a given notification.
 - Endpoint: ```POST /api/retrievefornotifications```
 - Request body example 1:
 ```
