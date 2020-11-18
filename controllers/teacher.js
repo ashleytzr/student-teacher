@@ -81,6 +81,7 @@ exports.postRegisterStudentsForTeacher = async (req, res, next) => {
 // Second question: As a teacher, I want to retrieve a list of students common to a given list of teachers
 exports.getStudentsByTeachers = async (req, res, next) => {
     const teacherEmail = req.query.teacher;
+    console.log(typeof teacherEmail);
     try {
         const teacherRes = await Teacher.findAll({
             where: { email: teacherEmail}
@@ -93,27 +94,59 @@ exports.getStudentsByTeachers = async (req, res, next) => {
             throw error;
         }
     
-        const teacherId = teacherRes[0]['id']; 
-        
-        const studentsUnderTeacherArray = await StudentTeacher.findAll({
-            where: { teacherId: teacherId }
+        let teacherIdArray = teacherRes.map( obj => {
+            return obj.id;
         });
+        
+        console.log(teacherIdArray);
+
+        if (typeof teacherEmail === 'object' && teacherEmail.length !== teacherIdArray.length ) {
+            const errorMessage = JSON.stringify({ message: 'One of the teachers provided does not exist in the database' });
+            const error = new Error(errorMessage);
+            error.statusCode = 400;
+            throw error;
+        }
+
+        let studentsUnderTeacherArray = []
+        let studentCounter = {}
+
+        for(var teacher of teacherIdArray) {
+            studentsUnderTeacherArray = await StudentTeacher.findAll({
+                where: { teacherId: teacher }
+            });
+
+            let studentIdArrayForEachTeacher = studentsUnderTeacherArray.map( obj => {
+                return obj.studentId;
+            });
+
+            console.log(studentIdArrayForEachTeacher);
+
+            await studentIdArrayForEachTeacher.forEach( id => {
+                studentCounter[id] = (studentCounter[id] || 0 ) + 1;
+            });
+            
+        }
+
+        console.log(studentCounter);
+
+        let commonStudentIdArray = [];
+
+        for (let key in studentCounter) {
+            if(studentCounter[key] === teacherIdArray.length) {
+                commonStudentIdArray.push(key);
+            }
+        }
+        
     
-        if (studentsUnderTeacherArray.length === 0) {
+        if (commonStudentIdArray.length === 0) {
             const errorMessage = JSON.stringify({ message: 'No students registered under given teacher(s)' });
             const error = new Error(errorMessage);
             error.statusCode = 400;
             throw error;
         }
 
-        let studentIdArray = []; 
-
-        studentsUnderTeacherArray.forEach( studentRes => {
-            studentIdArray.push(studentRes['studentId']);
-        });
-
         const studentResArray = await Student.findAll({
-            where: { id: studentIdArray}
+            where: { id: commonStudentIdArray}
         })
 
         if (studentResArray.length === 0) {
@@ -164,7 +197,7 @@ exports.postSuspendStudent = async (req, res) => {
             res.status(500).json({ message: 'Oops, something went wrong! :(' });
             console.log(err);
         }
-        
+
         res.status(err.statusCode).send(err.message);
     }    
 };

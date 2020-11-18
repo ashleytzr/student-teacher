@@ -44,7 +44,9 @@ describe('POST /api/add-teacher', () => {
 });
 
 
+// Register student to teacher
 describe('POST /api/register', () => {
+    // Success: Valid student and teacher 
     describe('Successfully register students to teacher', () => {
         beforeEach(async () => {
             await Teacher.upsert({ 
@@ -91,6 +93,7 @@ describe('POST /api/register', () => {
         });
     });
 
+    // Fail: Valid student and invalid teacher 
     describe('Fail to register students to teacher', () => {
         beforeEach(async () => {
             const teacherId = await modelUtil.getIdWithEmail('teacherken@gmail.com', Teacher);
@@ -129,3 +132,28 @@ describe('POST /api/register', () => {
         });
     });
 });
+
+// Retrieve common list of students to a teacher 
+    // Success: Valid teacher provided 
+
+    // Fail: Valid teacher + invalid teacher provided 
+
+
+// Suspend student
+    // Success: Valid student provided
+
+    // Fail: Student that does not exist in database is provided
+
+    // Fail: List of students given
+
+
+// Retrieve list of students who can receive notification
+    // Success: Notification text given + valid teacher given + there are students registered under given teacher
+
+    // Success: Notification text given + valid teacher given + there are students registered under given teacher + valid mentioned students 
+
+    // Success: Notification text givien + valid teacher given + no student registered under teacher + valid mentioned students 
+
+    // Fail: No notification text given + valid teacher given + there are students registered under given teacher
+
+    // Fail: Notification text given + valid teacher given + no student registered under teacher
