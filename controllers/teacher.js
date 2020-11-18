@@ -56,7 +56,8 @@ exports.postRegisterStudentsForTeacher = async (req, res, next) => {
         const teacherId = await modelUtil.getIdWithEmail(teacherEmail, Teacher);
         console.log(`Teacher ID obtained:  ${teacherId}`);
 
-        studentEmailArray.forEach( async studentEmail => {
+        // TODO: Implement transaction to rollback if one email is not valid 
+        for (let studentEmail of studentEmailArray) {
             let studentId = await modelUtil.getIdWithEmail(studentEmail, Student);
             console.log(`Student ID obtained:  ${studentId}`);
 
@@ -64,7 +65,7 @@ exports.postRegisterStudentsForTeacher = async (req, res, next) => {
                 studentId: studentId,
                 teacherId: teacherId
             });
-        });
+        }
 
         res.status(204).send('Success')
 
@@ -107,6 +108,7 @@ exports.getStudentsByTeachers = async (req, res, next) => {
             throw error;
         }
 
+        //TODO: Think about using intersection
         let studentsUnderTeacherArray = []
         let studentCounter = {}
 
